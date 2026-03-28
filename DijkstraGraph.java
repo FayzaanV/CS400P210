@@ -112,7 +112,20 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     public List<NodeType> shortestPathData(NodeType start, NodeType end) {
-        return null;
+        // Create node objects with the data type passed in using the MapADT get() method. If the either value does not exist in the graph,
+        // the get() method will throw a NoSuchElementException. Since we don't catch it, it will continue to bubble up the method call stack.
+        Node startNode = nodes.get(start);
+        Node endNode = nodes.get(end);
+        // Create a linked list to store all the nodes
+        LinkedList<NodeType> values = new LinkedList<>();
+        // Call the computeShortestPath() method. All the nodes on the path will be stored as the predecessor references.
+        SearchNode ending = computeShortestPath(startNode, endNode);
+        // Go through each predecessor value and add it to the start of the LinkedList
+        while (ending != null) {
+            values.addFirst(ending.node.data);
+            ending = ending.pred;
+        }
+        return values;
     }
 
     /**
@@ -129,7 +142,13 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     public double shortestPathCost(NodeType start, NodeType end) {
-        return Double.NaN;
+        // Create node objects with the data type passed in using the MapADT get() method. If the either value does not exist in the graph,
+        // the get() method will throw a NoSuchElementException. Since we don't catch it, it will continue to bubble up the method call stack.
+        Node startNode = nodes.get(start);
+        Node endNode = nodes.get(end);
+        // Call the computeShortestPath() method. All the nodes on the path will be stored as the predecessor references.
+        SearchNode ending = computeShortestPath(startNode, endNode);
+        return ending.cost;
     }
 
 }
