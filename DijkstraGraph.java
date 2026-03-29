@@ -151,4 +151,9 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         return ending.cost;
     }
 
+    public static void main(String[] args) {
+        DijkstraGraph<String, Double> test = new DijkstraGraph<>();
+        System.out.println("Everything compiled");
+    }
+
 }
