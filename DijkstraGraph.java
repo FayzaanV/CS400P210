@@ -93,6 +93,15 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     protected SearchNode computeShortestPath(Node start, Node end) {
+        // Make an ArrayList univisited of all the nodes
+        // Make a priority queue that will store SearchNode objects
+        // Make a SearchNode with start as the destination node using the first constructor
+        // while loop
+        // Pop the min search node off of the priority queue
+        // If the min destination is the end node, make a return that searchnode object
+        // If SearchNode destination node is in the arrayList (it is unvisited), should i store?
+        // Remove node from the unvisited list
+        // add each univisited neighbor
         return null;
     }
 
