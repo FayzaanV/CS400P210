@@ -224,6 +224,8 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         // Find the shortest path and it's cost
         List<String> pathAToE = test.shortestPathData("A", "E");
         double cost = test.shortestPathCost("A", "E");
+        
+        // Ensure each method returned the correct values and the path was correctly calculated.
         assertEquals(cost, 8);
         assertEquals(pathAToE.size(), 4);
         assertTrue(pathAToE.contains("A"));
@@ -233,12 +235,77 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
     }
 
     @Test
-    public void startNodeDNE() {
+    public void endNodeDNEOrIsNull() {
+        // Create the graph used in the lecture
+        DijkstraGraph<String, Double> test = new DijkstraGraph<>();
+        test.insertNode("A");
+        test.insertNode("B");
+        test.insertNode("C");
+        test.insertNode("D");
+        test.insertNode("E");
+        test.insertNode("F");
+        test.insertNode("G");
+        test.insertNode("H");
+        test.insertEdge("A", "B", 4.0);
+        test.insertEdge("A", "C", 2.0);
+        test.insertEdge("C", "D", 5.0);
+        test.insertEdge("B", "D", 1.0);
+        test.insertEdge("A", "E", 15.0);
+        test.insertEdge("B", "E", 10.0);
+        test.insertEdge("D", "E", 3.0);
+        test.insertEdge("D", "F", 0.0);
+        test.insertEdge("F", "D", 2.0);
+        test.insertEdge("F", "H", 4.0);
+        test.insertEdge("G", "H", 4.0);
 
+        boolean threwRightException = false;
+        try {
+            List<String> pathAToI = test.shortestPathData("A", "I");
+        } catch (NoSuchElementException e) {
+            threwRightException = true;
+        } catch (Exception e) { }
+        assertTrue(threwRightException);
+
+        threwRightException = false;
+        try {
+            List<String> pathAToNull = test.shortestPathData("A", null);
+        } catch (NullPointerException e) {
+            threwRightException = true;
+        } catch (Exception e) { }
+        assertTrue(threwRightException);
     }
 
     @Test
     public void noPathBetweenNodes() {
+        // Create the graph used in the lecture
+        DijkstraGraph<String, Double> test = new DijkstraGraph<>();
+        test.insertNode("A");
+        test.insertNode("B");
+        test.insertNode("C");
+        test.insertNode("D");
+        test.insertNode("E");
+        test.insertNode("F");
+        test.insertNode("G");
+        test.insertNode("H");
+        test.insertEdge("A", "B", 4.0);
+        test.insertEdge("A", "C", 2.0);
+        test.insertEdge("C", "D", 5.0);
+        test.insertEdge("B", "D", 1.0);
+        test.insertEdge("A", "E", 15.0);
+        test.insertEdge("B", "E", 10.0);
+        test.insertEdge("D", "E", 3.0);
+        test.insertEdge("D", "F", 0.0);
+        test.insertEdge("F", "D", 2.0);
+        test.insertEdge("F", "H", 4.0);
+        test.insertEdge("G", "H", 4.0);
 
+        boolean threwRightException = false;
+        try {
+            List<String> pathAToG = test.shortestPathData("A", "G");
+        } catch (NoSuchElementException e) {
+            if (e.getMessage().equals("There is no path from the start node to the end node"))
+                threwRightException = true;
+        } catch (Exception e) { }
+        assertTrue(threwRightException);
     }
 }
