@@ -197,6 +197,14 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         return ending.cost;
     }
 
+
+    /////////////////////////////////////////////////   TESTER METHODS  /////////////////////////////////////////////////
+
+    /**
+     * This tester method tests two nodes that are both in the graph and have a path between them based on what was shown in lecture.
+     * It then checks that the path cost is correct, that the correct number of nodes are in the path, and that each node that is on the
+     * path is in the list.
+     */
     @Test
     public void twoNodesInGraphWithPath() {
         // Create the graph used in the lecture
@@ -234,6 +242,11 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         assertTrue(pathAToE.contains("E"));
     }
 
+    /**
+     * This test test the cases where a node does not exist in the graph or if a null input is given. It ensures the test only passes when each case
+     * throws a NoSuchElementException or a NullPointerException, respectively. Since there are multiple places these exceptions could be caught,
+     * I did not specify an exception message like I do later in the next test.
+     */
     @Test
     public void endNodeDNEOrIsNull() {
         // Create the graph used in the lecture
@@ -258,6 +271,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         test.insertEdge("F", "H", 4.0);
         test.insertEdge("G", "H", 4.0);
 
+        // Try running the methods with a node that isn't in the graph. Update the boolean if and only if a NoSuchElementException is thrown
         boolean threwRightException = false;
         try {
             List<String> pathAToI = test.shortestPathData("A", "I");
@@ -266,6 +280,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         } catch (Exception e) { }
         assertTrue(threwRightException);
 
+        // Try running the methods with a null input. Update the boolean if and only if a NullPointerException is thrown
         threwRightException = false;
         try {
             List<String> pathAToNull = test.shortestPathData("A", null);
@@ -275,6 +290,10 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         assertTrue(threwRightException);
     }
 
+    /**
+     * This test tests the case where no path is found between the two nodes. It only passes when a NoSuchElementException with the correct message
+     * is thrown, since there are multiple other NoSuchElementExceptions that could be thrown.
+     */
     @Test
     public void noPathBetweenNodes() {
         // Create the graph used in the lecture
@@ -299,6 +318,8 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         test.insertEdge("F", "H", 4.0);
         test.insertEdge("G", "H", 4.0);
 
+        // Try running the methods with nodes that have no path between them. Update the boolean if and only if a NoSuchElementException is thrown and
+        // if it has the correct error message.
         boolean threwRightException = false;
         try {
             List<String> pathAToG = test.shortestPathData("A", "G");
