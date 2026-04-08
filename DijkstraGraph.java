@@ -105,29 +105,35 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         if (!nodes.containsKey(end.data)) {
             throw new NoSuchElementException("End node cannot be found in the graph");
         }
-        // Make an List of all unvisited nodes
-        List<NodeType> unvisited = getAllNodes();
+
+        // Make a LinkedList of all visited nodes
+        List<NodeType> visited = new LinkedList<>();
+
         // Make a priority queue that will store SearchNode objects
         PriorityQueue<SearchNode> pq = new PriorityQueue<>();
-        // Make a SearchNode with start as the destination node using the first constructor
-        SearchNode currNode = new SearchNode(start);
-        unvisited.remove(currNode.node);
+
+        // Make a SearchNode with start as the destination node using the first constructor and add to visited list
+        SearchNode firstNode = new SearchNode(start);
+        pq.offer(firstNode);
+
         // while loop
         while(!pq.isEmpty()) {
             // Pop the min search node off of the priority queue
             SearchNode path = pq.poll();
+
             // If the min destination is the end node, make a return that searchnode object
             if (path.node.equals(end)) {
                 return path;
             }
-            // If SearchNode destination node is in the arrayList (it is unvisited), should i store?
-            if (unvisited.contains(path.node)) {
-                // Remove node from the unvisited list
-                unvisited.remove(path.node);
+
+            // If SearchNode destination node is unvisited, then it is a new shortest path
+            if (!(visited.contains(path.node.data))) {
+                // Add node to the visited list
+                visited.add(path.node.data);
                 List<Edge> edgesOut = path.node.edgesLeaving;
                 // add each univisited neighbor
                 for (Edge e : edgesOut) {
-                    if (unvisited.contains(e.succ)) {
+                    if (!(visited.contains(e.succ.data))) {
                         pq.offer(new SearchNode(path, e));
                     }
                 }
@@ -192,7 +198,8 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
     }
 
     @Test
-    public void test1() {
+    public void twoNodesInGraphWithPath() {
+        // Create the graph used in the lecture
         DijkstraGraph<String, Double> test = new DijkstraGraph<>();
         test.insertNode("A");
         test.insertNode("B");
@@ -213,7 +220,25 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         test.insertEdge("F", "D", 2.0);
         test.insertEdge("F", "H", 4.0);
         test.insertEdge("G", "H", 4.0);
-        System.out.println(test.getNodeCount());
-        assertEquals(test.getNodeCount(), 8);
+
+        // Find the shortest path and it's cost
+        List<String> pathAToE = test.shortestPathData("A", "E");
+        double cost = test.shortestPathCost("A", "E");
+        assertEquals(cost, 8);
+        assertEquals(pathAToE.size(), 4);
+        assertTrue(pathAToE.contains("A"));
+        assertTrue(pathAToE.contains("B"));
+        assertTrue(pathAToE.contains("D"));
+        assertTrue(pathAToE.contains("E"));
+    }
+
+    @Test
+    public void startNodeDNE() {
+
+    }
+
+    @Test
+    public void noPathBetweenNodes() {
+
     }
 }
