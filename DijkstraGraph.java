@@ -2,6 +2,8 @@ import java.util.PriorityQueue;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class extends the BaseGraph data structure with additional methods for
@@ -93,7 +95,17 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     protected SearchNode computeShortestPath(Node start, Node end) {
-        // Make an ArrayList univisited of all the nodes
+        // Exception handling
+        if (start == null || end == null) {
+            throw new NullPointerException("Neither start nor end node can be null");
+        }
+        if (!nodes.containsKey(start.data)) {
+            throw new NoSuchElementException("Start node cannot be found in the graph");
+        }
+        if (!nodes.containsKey(end.data)) {
+            throw new NoSuchElementException("End node cannot be found in the graph");
+        }
+        // Make an List of all unvisited nodes
         List<NodeType> unvisited = getAllNodes();
         // Make a priority queue that will store SearchNode objects
         PriorityQueue<SearchNode> pq = new PriorityQueue<>();
@@ -179,9 +191,29 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         return ending.cost;
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void test1() {
         DijkstraGraph<String, Double> test = new DijkstraGraph<>();
-        System.out.println("Everything compiled");
+        test.insertNode("A");
+        test.insertNode("B");
+        test.insertNode("C");
+        test.insertNode("D");
+        test.insertNode("E");
+        test.insertNode("F");
+        test.insertNode("G");
+        test.insertNode("H");
+        test.insertEdge("A", "B", 4.0);
+        test.insertEdge("A", "C", 2.0);
+        test.insertEdge("C", "D", 5.0);
+        test.insertEdge("B", "D", 1.0);
+        test.insertEdge("A", "E", 15.0);
+        test.insertEdge("B", "E", 10.0);
+        test.insertEdge("D", "E", 3.0);
+        test.insertEdge("D", "F", 0.0);
+        test.insertEdge("F", "D", 2.0);
+        test.insertEdge("F", "H", 4.0);
+        test.insertEdge("G", "H", 4.0);
+        System.out.println(test.getNodeCount());
+        assertEquals(test.getNodeCount(), 8);
     }
-
 }
