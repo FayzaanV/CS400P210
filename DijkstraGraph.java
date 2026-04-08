@@ -94,15 +94,34 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      */
     protected SearchNode computeShortestPath(Node start, Node end) {
         // Make an ArrayList univisited of all the nodes
+        List<NodeType> unvisited = getAllNodes();
         // Make a priority queue that will store SearchNode objects
+        PriorityQueue<SearchNode> pq = new PriorityQueue<>();
         // Make a SearchNode with start as the destination node using the first constructor
+        SearchNode currNode = new SearchNode(start);
+        unvisited.remove(currNode.node);
         // while loop
-        // Pop the min search node off of the priority queue
-        // If the min destination is the end node, make a return that searchnode object
-        // If SearchNode destination node is in the arrayList (it is unvisited), should i store?
-        // Remove node from the unvisited list
-        // add each univisited neighbor
-        return null;
+        while(!pq.isEmpty()) {
+            // Pop the min search node off of the priority queue
+            SearchNode path = pq.poll();
+            // If the min destination is the end node, make a return that searchnode object
+            if (path.node.equals(end)) {
+                return path;
+            }
+            // If SearchNode destination node is in the arrayList (it is unvisited), should i store?
+            if (unvisited.contains(path.node)) {
+                // Remove node from the unvisited list
+                unvisited.remove(path.node);
+                List<Edge> edgesOut = path.node.edgesLeaving;
+                // add each univisited neighbor
+                for (Edge e : edgesOut) {
+                    if (unvisited.contains(e.succ)) {
+                        pq.offer(new SearchNode(path, e));
+                    }
+                }
+            }
+        }
+        throw new NoSuchElementException("There is no path from the start node to the end node");
     }
 
     /**
