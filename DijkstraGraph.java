@@ -107,7 +107,7 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
         }
 
         // Make a LinkedList of all visited nodes
-        List<NodeType> visited = new LinkedList<>();
+        PlaceholderMap<Node, Node> visited = new PlaceholderMap<>();
 
         // Make a priority queue that will store SearchNode objects
         PriorityQueue<SearchNode> pq = new PriorityQueue<>();
@@ -127,13 +127,13 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
             }
 
             // If SearchNode destination node is unvisited, then it is a new shortest path
-            if (!(visited.contains(path.node.data))) {
+            if (!(visited.containsKey(path.node))) {
                 // Add node to the visited list
-                visited.add(path.node.data);
+                visited.put(path.node, path.node);
                 List<Edge> edgesOut = path.node.edgesLeaving;
                 // add each univisited neighbor
                 for (Edge e : edgesOut) {
-                    if (!(visited.contains(e.succ.data))) {
+                    if (!(visited.containsKey(e.succ))) {
                         pq.offer(new SearchNode(path, e));
                     }
                 }
